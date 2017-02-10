@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" lang="en-us" xml:lang="en-us" data-mc-search-type="Stem" data-mc-help-system-file-name="index.xml" data-mc-path-to-help-system="" data-mc-target-type="WebHelp2" data-mc-runtime-file-type="Topic" data-mc-preload-images="false" data-mc-in-preview-mode="false" data-mc-toc-path="">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Get List of All Countries Where Products Are Offered</title>
+        <link href="Skins/Default/Stylesheets/Slideshow.css" rel="stylesheet" data-mc-generated="True" />
+        <link href="Skins/Default/Stylesheets/TextEffects.css" rel="stylesheet" data-mc-generated="True" />
+        <link href="Skins/Default/Stylesheets/Topic.css" rel="stylesheet" data-mc-generated="True" />
+        <link href="Skins/Default/Stylesheets/Components/Styles.css" rel="stylesheet" data-mc-generated="True" />
+        <link href="Skins/Default/Stylesheets/Components/Tablet.css" rel="stylesheet" data-mc-generated="True" />
+        <link href="Skins/Default/Stylesheets/Components/Mobile.css" rel="stylesheet" data-mc-generated="True" />
+        <link href="resources/tablestyles/footertablestyle.css" rel="stylesheet" />
+        <link href="resources/stylesheets/tata_communications_stylesheet.css" rel="stylesheet" />
+        <script src="Resources/Scripts/custom.modernizr.js">
+        </script>
+        <script src="Resources/Scripts/jquery.min.js">
+        </script>
+        <script src="Resources/Scripts/require.min.js">
+        </script>
+        <script src="Resources/Scripts/require.config.js">
+        </script>
+        <script src="Resources/Scripts/foundation.min.js">
+        </script>
+        <script src="Resources/Scripts/plugins.min.js">
+        </script>
+        <script src="Resources/Scripts/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p>
+            <MadCap:pageHeader>
+                <p>
+                    <table style="width: 100%;border-left-style: none;border-left-width: ;border-left-color: ;border-right-style: none;border-right-width: ;border-right-color: ;border-top-style: none;border-top-width: ;border-top-color: ;border-bottom-style: solid;border-bottom-width: 1pt;border-bottom-color: #b0bc25;margin-left: 0;margin-right: auto;">
+                        <col style="width: 369px;" />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: left;vertical-align: bottom;">&#160;</td>
+                                <td style="vertical-align: bottom;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </p>
+            </MadCap:pageHeader>
+        </p>
+        <h3 class="Heading3"><a name="_Toc472089245"></a>Get List of All Countries Where Products Are Offered</h3>
+        <p class="BodyCopy">This API returns a list of all countries where one or more specific products are offered.</p>
+        <p class="BodyCopy">You can use this command to determine the set of products offered in a geography. </p>
+        <table class="table_1">
+            <col style="width: 76pt;" />
+            <col style="width: 356pt;" />
+            <thead>
+                <tr>
+                    <th class="th_1">
+                        <p class="TipHeading"><a name="_Toc464658445"></a>
+                            <img src="resources/images/product_availability_api/prerequisites_38x38.png" style="width: 38;height: 38;" alt="blue pencil-48 (1).png" class="img_2" />
+                        </p>
+                    </th>
+                    <th class="th_1">
+                        <p class="Tip">The ID of a country is a 3 letter ISO 3166-1 alpha-3 code.</p>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <h4 class="Heading4">Parameters</h4>
+        <p class="BodyCopy">None</p>
+        <h4 class="Heading4">Response</h4>
+        <table align="center" class="table_2">
+            <col style="width: 14%;" />
+            <col style="width: 36%;" />
+            <col style="width: 50%;" />
+            <thead>
+                <tr>
+                    <th class="th_2">
+                        <p class="TableHeader">Return</p>
+                    </th>
+                    <th class="th_2">
+                        <p class="TableHeader">Reason</p>
+                    </th>
+                    <th class="th_2">
+                        <p class="TableHeader">Description</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="td_1">
+                        <p class="Code_1">400</p>
+                    </td>
+                    <td class="td_1">
+                        <p class="TableBodyCopy">Bad Request</p>
+                    </td>
+                    <td class="td_1">
+                        <p>
+                            <p class="table">
+                                <p class="TableBodyCopy">The request could not be understood by the server due to malformed syntax.</p>
+                            </p>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_2">
+                        <p class="Code_1">401</p>
+                    </td>
+                    <td class="td_2">
+                        <p class="TableBodyCopy">Unauthorized Request</p>
+                    </td>
+                    <td class="td_2">
+                        <p class="TableBodyCopy">The request requires user authentication. If the request includes user authentication,  authorization has been  refused for the given credentials.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_1">
+                        <p class="Code_1">403</p>
+                    </td>
+                    <td class="td_1">
+                        <p class="TableBodyCopy">Forbidden</p>
+                    </td>
+                    <td class="td_1">
+                        <p class="TableBodyCopy">The server understood the request, but is refusing to fulfill it.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_2">
+                        <p class="Code_1">404</p>
+                    </td>
+                    <td class="td_2">
+                        <p class="TableBodyCopy">Not Found</p>
+                    </td>
+                    <td class="td_2">
+                        <p class="TableBodyCopy">The server has not found anything matching the Request-URI. This response is commonly used when the server cannot provide the reason for refusing the request, or when no other reason is available. </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_1">
+                        <p class="Code_1">405</p>
+                    </td>
+                    <td class="td_1">
+                        <p class="TableBodyCopy">Method Not Allowed</p>
+                    </td>
+                    <td class="td_1">
+                        <p class="TableBodyCopy">The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_2">
+                        <p class="Code_1">500</p>
+                    </td>
+                    <td class="td_2">
+                        <p class="TableBodyCopy">Internal Server Error</p>
+                    </td>
+                    <td class="td_2">
+                        <p class="TableBodyCopy">The server encountered an unexpected condition which prevented it from fulfilling the request.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="Heading4">Example</h4>
+        <p class="Code">generic_country_array [</p>
+        <p class="Code">country</p>
+        <p class="Code">]</p>
+        <p class="Code">country {</p>
+        <p class="Code">id (string): A country id, its ISO 3166-1 alpha-3 country code ,</p>
+        <p class="Code">isoAlpha2Code (string): The country ISO 3166-1 alpha-2 country code ,</p>
+        <p class="Code">countryName (string): The country name ,</p>
+        <p class="Code">countryCallingCode (string): The telephony calling code of the country ,</p>
+        <p class="Code">characteristics (nested_characteristics4),</p>
+        <p class="Code">products (Array[nested_products]): The list of available products in the country </p>
+        <p class="Code">}</p>
+        <p class="Code">nested_characteristics4 {</p>
+        <p class="Code">isFixedNumbersOffered (boolean): Are fixed line phone numbers offered in this country ,</p>
+        <p class="Code">isMobileNumbersOffered (boolean): Are mobile numbers offered in this country ,</p>
+        <p class="Code">isPayphoneNumbersOffered (boolean): Are payphone numbers offered in this country ,</p>
+        <p class="Code">standardLeadTime (string): The time it minimally takes to order a new phone number in this country </p>
+        <p class="Code">}</p>
+        <p class="Code">nested_products {</p>
+        <p class="Code">name (string): The product name ,</p>
+        <p class="Code">href (string): A complete URL to the related product </p>
+        <p class="Code">}</p>
+        <p>
+            <MadCap:pageFooter>
+                <table style="width: 100%;mc-table-style: url('resources/tablestyles/footertablestyle.css');border-spacing: 0px 3px;border-left-style: none;border-left-width: 1px;border-left-color: #000000;border-right-style: none;border-right-width: 1px;border-right-color: #000000;border-top-style: solid;border-top-width: 1pt;border-top-color: #b0bc25;border-bottom-style: none;border-bottom-width: 1px;border-bottom-color: #000000;margin-left: 0;margin-right: auto;" class="TableStyle-FooterTableStyle" cellspacing="0">
+                    <col style="width: 382px;" />
+                    <col />
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left;font-size: 8pt;vertical-align: bottom;" class="TableStyle-FooterTableStyle-BodyI--"><a href="http://www.tatacommunications.com/" target="_blank">www.tatacommunications.com</a><![CDATA[  ]]></td>
+                            <td style="text-align: right;font-size: 8pt;" class="TableStyle-FooterTableStyle-BodyG--">
+                                <img src="resources/images/twitter-logo-vector-download_19x15.jpg" style="width: 19;height: 15;" /><a href="https://twitter.com/tata_comm" target="_blank">@tata_comm</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;font-size: 8pt;" class="TableStyle-FooterTableStyle-BodyI--"><a href="http://tatacommunications-newworld.com/" target="_blank">tatacommunications-newworld.com</a>
+                            </td>
+                            <td style="text-align: right;font-size: 8pt;" class="TableStyle-FooterTableStyle-BodyG--"><a href="http://www.youtube.com/tatacomms" target="_blank">www.youtube.com/tatacomms</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 7pt;margin-top: 11pt;text-align: center;padding: 0px;" class="TableStyle-FooterTableStyle-BodyA--" colspan="2">
+                                <table style="width: 100%;">
+                                    <col style="width: 595px;" />
+                                    <col />
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <p style="text-align: left;vertical-align: bottom;"><span style="font-size: 8pt;">© 2016 Tata Communications. All rights reserved.<br />TATA COMMUNICATIONS and TATA are trademarks of Tata Sons Limited in certain countries.</span>
+                                                </p>
+                                            </td>
+                                            <td style="text-align: right;vertical-align: bottom;">
+                                                <p>&#160;</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </MadCap:pageFooter>
+        </p>
+    </body>
+</html>
