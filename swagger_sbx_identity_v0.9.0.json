@@ -1,0 +1,132 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Provisioning APIs",
+    "description" : "Swagger UI documentation for sandbox identity management",
+    "version" : "0.9.0"
+  },
+  "host" : "api.tatacommunications.com",
+  "schemes" : [
+    "https"
+  ],
+  "basePath" : "/GSC/v1",
+  "produces" : [
+    "application/json"
+  ],
+  "definitions" : {
+    "Error" : {
+      "description" : "A generic error message in json format",
+      "properties" : {
+        "error" : {
+          "type" : "string",
+          "description" : "The error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Additional data that was passed in to describe the error."
+        },
+        "error_code" : {
+          "type" : "integer",
+          "description" : "The error code to identify an error message by code.",
+          "format" : "int64"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "error"
+      ]
+    },
+    "api_token" : {
+      "description" : "An issued sandbox api token.",
+      "properties" : {
+        "token" : {
+          "type" : "string",
+          "description" : "The api token created."
+        },
+        "expiresAt" : {
+          "type" : "integer",
+          "description" : "When the token expires in the epoch time format as seconds",
+          "format" : "int64"
+        },
+        "createdAt" : {
+          "type" : "string",
+          "description" : "The date the token was created",
+          "format" : "date-time"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "token",
+        "expiresAt",
+        "createdAt"
+      ]
+    }
+  },
+  "paths" : {
+    "/register" : {
+      "post" : {
+        "description" : "<p>Use this command to be given an API token that must be provided with every sandbox API command.</p><p>This token allows us to identify the data specific to your sandbox account and prevents others from accessing it.</p><p>Note that a sandbox token expires in 30 days, so any test data you work with is not available 30 days after you start working with it.</p>",
+        "summary" : "Register to get a sandbox api token",
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "An issued sandbox api token.",
+            "schema" : {
+              "$ref" : "#/definitions/api_token"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "identity"
+        ]
+      }
+    }
+  },
+  "tags" : [
+    {
+      "description" : "Register your application for sandbox use",
+      "name" : "identity"
+    }
+  ]
+}

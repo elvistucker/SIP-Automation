@@ -1,0 +1,1971 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Provisioning APIs",
+    "description" : "Swagger UI documentation for Account Management API",
+    "version" : "0.9.0"
+  },
+  "host" : "api.tatacommunications.com",
+  "schemes" : [
+    "https"
+  ],
+  "basePath" : "/GSC/v1",
+  "produces" : [
+    "application/json"
+  ],
+  "definitions" : {
+    "Error" : {
+      "description" : "A generic error message in json format",
+      "properties" : {
+        "error" : {
+          "type" : "string",
+          "description" : "The error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Additional data that was passed in to describe the error."
+        },
+        "error_code" : {
+          "type" : "integer",
+          "description" : "The error code to identify an error message by code.",
+          "format" : "int64"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "error"
+      ]
+    },
+    "create_a_new_contact_for_a_customer" : {
+      "description" : "json payload",
+      "properties" : {
+        "givenName" : {
+          "type" : "string",
+          "description" : "First name(s) of the contact person"
+        },
+        "familyName" : {
+          "type" : "string",
+          "description" : "Last name of the contact person"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "Contact email address"
+        },
+        "telephoneNumber" : {
+          "type" : "string",
+          "description" : "Contact telephone number"
+        },
+        "address" : {
+          "$ref" : "#/definitions/contactAddress"
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Name prefix. Accepted values list ",
+          "enum" : [
+            "Mr",
+            "Mrs",
+            "Ms",
+            "Dr"
+          ]
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "givenName",
+        "familyName",
+        "email",
+        "telephoneNumber",
+        "address"
+      ]
+    },
+    "contactAddress" : {
+      "description" : "nested model",
+      "properties" : {
+        "street1" : {
+          "type" : "string",
+          "description" : "Mailing address street"
+        },
+        "street2" : {
+          "type" : "string",
+          "description" : "Additional street address information"
+        },
+        "city" : {
+          "type" : "string",
+          "description" : "Mailing address city"
+        },
+        "stateOrProvince" : {
+          "type" : "string",
+          "description" : "Mailing address state or province"
+        },
+        "postalCode" : {
+          "type" : "string",
+          "description" : "Mailing address zip code"
+        },
+        "country" : {
+          "type" : "string",
+          "description" : "Mailing address country"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "street1",
+        "city",
+        "stateOrProvince",
+        "postalCode",
+        "country"
+      ]
+    },
+    "payloadContactRelatedParties" : {
+      "description" : "nested model",
+      "properties" : {
+        "role" : {
+          "type" : "string",
+          "description" : "The role of the related party. Possible values list ",
+          "enum" : [
+            "customer"
+          ]
+        },
+        "href" : {
+          "type" : "string",
+          "description" : "A complete URL to the related party object"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "role",
+        "href"
+      ]
+    },
+    "contact" : {
+      "description" : "A contact object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this contact in the system"
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Name prefix. Possible values list ",
+          "enum" : [
+            "Mr",
+            "Mrs",
+            "Ms",
+            "Dr"
+          ]
+        },
+        "givenName" : {
+          "type" : "string",
+          "description" : "First name(s) of the contact person"
+        },
+        "familyName" : {
+          "type" : "string",
+          "description" : "Last name of the contact person"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "Contact email address"
+        },
+        "telephoneNumber" : {
+          "type" : "string",
+          "description" : "Contact telephone number"
+        },
+        "isActive" : {
+          "type" : "boolean",
+          "description" : "Is the contact considered active or not"
+        },
+        "address" : {
+          "$ref" : "#/definitions/contactAddress"
+        },
+        "relatedParties" : {
+          "type" : "array",
+          "description" : "A list of other resources related to the contact",
+          "items" : {
+            "$ref" : "#/definitions/payloadContactRelatedParties"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "title",
+        "givenName",
+        "familyName",
+        "email",
+        "telephoneNumber",
+        "isActive",
+        "address",
+        "relatedParties"
+      ]
+    },
+    "contact_array" : {
+      "description" : "A contact array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/contact"
+      }
+    },
+    "update_a_specific_contact" : {
+      "description" : "json payload",
+      "properties" : {
+        "title" : {
+          "type" : "string",
+          "description" : "Name prefix. Accepted values list ",
+          "enum" : [
+            "Mr",
+            "Mrs",
+            "Ms",
+            "Dr"
+          ]
+        },
+        "givenName" : {
+          "type" : "string",
+          "description" : "First name(s) of the contact person"
+        },
+        "familyName" : {
+          "type" : "string",
+          "description" : "Last name of the contact person"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "Contact email address"
+        },
+        "telephoneNumber" : {
+          "type" : "string",
+          "description" : "Contact telephone number"
+        },
+        "isActive" : {
+          "type" : "boolean",
+          "description" : "Is the contact considered active or not"
+        },
+        "address" : {
+          "$ref" : "#/definitions/contactAddress"
+        }
+      },
+      "type" : "object"
+    },
+    "create_a_new_customer_account" : {
+      "description" : "json payload",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "The customer name"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/customerCharacteristics"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "name",
+        "characteristics"
+      ]
+    },
+    "customerCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "segment" : {
+          "type" : "string",
+          "description" : "Market segment of the customer. Accepted values list ",
+          "enum" : [
+            "enterprise",
+            "serviceProvider"
+          ]
+        },
+        "industry" : {
+          "type" : "string",
+          "description" : "Industry the customer belongs to. Accepted values list ",
+          "enum" : [
+            "agriculture",
+            "conglomerate",
+            "education",
+            "financial",
+            "government",
+            "informationTechnology",
+            "manufacturing",
+            "mediaEntertainment",
+            "professional",
+            "services",
+            "telecom",
+            "trade",
+            "utility"
+          ]
+        },
+        "regions" : {
+          "type" : "array",
+          "description" : "One or more regions the customer operates in. Accepted values list = [africa, asia, caribbean, centralAmerica, easternEurope, europeanUnion, middleEast, northAmerica, southAmerica, oceania]",
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "africa",
+              "asia",
+              "caribbean",
+              "centralAmerica",
+              "easternEurope",
+              "europeanUnion",
+              "middleEast",
+              "northAmerica",
+              "southAmerica",
+              "oceania"
+            ]
+          }
+        },
+        "countries" : {
+          "type" : "array",
+          "description" : "One or more countries the customer operates in. Accepted values are ISO 3166-1 alpha-3 country codes (e.g. 'France' is 'FRA'; 'Spain' is 'ESP'",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "hqRegion" : {
+          "type" : "string",
+          "description" : "The region where the customer is headquartered in. Accepted values list ",
+          "enum" : [
+            "africa",
+            "asia",
+            "caribbean",
+            "centralAmerica",
+            "easternEurope",
+            "europeanUnion",
+            "middleEast",
+            "northAmerica",
+            "southAmerica",
+            "oceania"
+          ]
+        },
+        "hqCountry" : {
+          "type" : "string",
+          "description" : "The country where the customer is headquartered in, as an ISO 3166-1 alpha-3 country code"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "segment",
+        "industry",
+        "regions",
+        "countries",
+        "hqRegion",
+        "hqCountry"
+      ]
+    },
+    "payloadCustomerCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "segment" : {
+          "type" : "string",
+          "description" : "Market segment of the customer. Possible values list ",
+          "enum" : [
+            "enterprise",
+            "serviceProvider"
+          ]
+        },
+        "industry" : {
+          "type" : "string",
+          "description" : "Industry the customer belongs to. Possible values list ",
+          "enum" : [
+            "agriculture",
+            "conglomerate",
+            "education",
+            "financial",
+            "government",
+            "informationTechnology",
+            "manufacturing",
+            "mediaEntertainment",
+            "professional",
+            "services",
+            "telecom",
+            "trade",
+            "utility"
+          ]
+        },
+        "regions" : {
+          "type" : "array",
+          "description" : "One or more regions the customer operates in. Possible values list = [africa, asia, caribbean, centralAmerica, easternEurope, europeanUnion, middleEast, northAmerica, southAmerica, oceania]",
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "africa",
+              "asia",
+              "caribbean",
+              "centralAmerica",
+              "easternEurope",
+              "europeanUnion",
+              "middleEast",
+              "northAmerica",
+              "southAmerica",
+              "oceania"
+            ]
+          }
+        },
+        "countries" : {
+          "type" : "array",
+          "description" : "One or more countries the customer operates in. Values will be ISO 3166-1 alpha-3 country codes (e.g. 'France' is 'FRA'; 'Spain' is 'ESP'",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "hqRegion" : {
+          "type" : "string",
+          "description" : "The region where the customer is headquartered in. Possible values list ",
+          "enum" : [
+            "africa",
+            "asia",
+            "caribbean",
+            "centralAmerica",
+            "easternEurope",
+            "europeanUnion",
+            "middleEast",
+            "northAmerica",
+            "southAmerica",
+            "oceania"
+          ]
+        },
+        "hqCountry" : {
+          "type" : "string",
+          "description" : "The country where the customer is headquartered in, as an ISO 3166-1 alpha-3 country code"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "segment",
+        "industry",
+        "regions",
+        "countries",
+        "hqRegion",
+        "hqCountry"
+      ]
+    },
+    "payloadCustomerRelatedParty" : {
+      "description" : "nested model",
+      "properties" : {
+        "role" : {
+          "type" : "string",
+          "description" : "The role of the related party. Possible values list ",
+          "enum" : [
+            "contact",
+            "organization"
+          ]
+        },
+        "href" : {
+          "type" : "string",
+          "description" : "A complete URL to the related party object"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "role",
+        "href"
+      ]
+    },
+    "customer" : {
+      "description" : "A customer object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this customer in the system"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "The customer name"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Status of the customer. Possible values list ",
+          "enum" : [
+            "new",
+            "active",
+            "inactive"
+          ]
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadCustomerCharacteristics"
+        },
+        "relatedParty" : {
+          "type" : "array",
+          "description" : "A list of other resources related to the customer",
+          "items" : {
+            "$ref" : "#/definitions/payloadCustomerRelatedParty"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "name",
+        "characteristics",
+        "relatedParty"
+      ]
+    },
+    "update_a_specific_customer" : {
+      "description" : "json payload",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "Customer name"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/updateCustomerCharacteristics"
+        }
+      },
+      "type" : "object"
+    },
+    "updateCustomerCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "segment" : {
+          "type" : "string",
+          "description" : "Market segment of the customer. Accepted values list ",
+          "enum" : [
+            "enterprise",
+            "serviceProvider"
+          ]
+        },
+        "industry" : {
+          "type" : "string",
+          "description" : "Industry the customer belongs to. Accepted values list ",
+          "enum" : [
+            "agriculture",
+            "conglomerate",
+            "education",
+            "financial",
+            "government",
+            "informationTechnology",
+            "manufacturing",
+            "mediaEntertainment",
+            "professional",
+            "services",
+            "telecom",
+            "trade",
+            "utility"
+          ]
+        },
+        "regions" : {
+          "type" : "array",
+          "description" : "One or more regions the customer operates in. Accepted values list = [africa, asia, caribbean, centralAmerica, easternEurope, europeanUnion, middleEast, northAmerica, southAmerica, oceania]",
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "africa",
+              "asia",
+              "caribbean",
+              "centralAmerica",
+              "easternEurope",
+              "europeanUnion",
+              "middleEast",
+              "northAmerica",
+              "southAmerica",
+              "oceania"
+            ]
+          }
+        },
+        "countries" : {
+          "type" : "array",
+          "description" : "One or more countries the customer operates in. Accepted values are ISO 3166-1 alpha-3 country codes (e.g. 'France' is 'FRA'; 'Spain' is 'ESP'",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "hqRegion" : {
+          "type" : "string",
+          "description" : "The region where the customer is headquartered in. Accepted values list ",
+          "enum" : [
+            "africa",
+            "asia",
+            "caribbean",
+            "centralAmerica",
+            "easternEurope",
+            "europeanUnion",
+            "middleEast",
+            "northAmerica",
+            "southAmerica",
+            "oceania"
+          ]
+        },
+        "hqCountry" : {
+          "type" : "string",
+          "description" : "The country where the customer is headquartered in, as an ISO 3166-1 alpha-3 country code"
+        }
+      },
+      "type" : "object"
+    },
+    "create_a_new_organizational_entity_for_a_customer" : {
+      "description" : "json payload",
+      "properties" : {
+        "isLegalEntity" : {
+          "type" : "boolean",
+          "description" : "Defines whether this organization is a legal entity for the customer or not. Set to true if this is legal contact information"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Defines what type of customer this entity represents. Accepted values list ",
+          "enum" : [
+            "partner",
+            "directCustomer",
+            "partnerCustomer"
+          ]
+        },
+        "tradingName" : {
+          "type" : "string",
+          "description" : "Legal name of the organization entity"
+        },
+        "registrationNumber" : {
+          "type" : "string",
+          "description" : "Registration number of the organization entity"
+        },
+        "website" : {
+          "type" : "string",
+          "description" : "Customer or organization website"
+        },
+        "address" : {
+          "$ref" : "#/definitions/contactAddress"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/organizationCharacteristics"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "isLegalEntity",
+        "type",
+        "tradingName",
+        "registrationNumber",
+        "website",
+        "address",
+        "characteristics"
+      ]
+    },
+    "organizationCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "industry" : {
+          "type" : "string",
+          "description" : "Industry the customer belongs to. Accepted values list ",
+          "enum" : [
+            "agriculture",
+            "conglomerate",
+            "education",
+            "financial",
+            "government",
+            "informationTechnology",
+            "manufacturing",
+            "mediaEntertainment",
+            "professional",
+            "services",
+            "telecom",
+            "trade",
+            "utility"
+          ]
+        },
+        "parentPartnerId" : {
+          "type" : "string",
+          "description" : "The organizational id of a partner organization, required if organization is of type directCustomer or partnerCustomer"
+        },
+        "isPurchaseOrderRequired" : {
+          "type" : "boolean",
+          "description" : "Whether a Purchase Order will be required in invoicing for product orders. Accepted values: true, false"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "industry",
+        "isPurchaseOrderRequired"
+      ]
+    },
+    "payloadOrganizationCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "industry" : {
+          "type" : "string",
+          "description" : "Industry the customer belongs to. Possible values list ",
+          "enum" : [
+            "agriculture",
+            "conglomerate",
+            "education",
+            "financial",
+            "government",
+            "informationTechnology",
+            "manufacturing",
+            "mediaEntertainment",
+            "professional",
+            "services",
+            "telecom",
+            "trade",
+            "utility"
+          ]
+        },
+        "isPurchaseOrderRequired" : {
+          "type" : "boolean",
+          "description" : "Whether a Purchase Order will be required in invoicing for product orders. Possible values: true, false"
+        },
+        "parentPartnerId" : {
+          "type" : "string",
+          "description" : "The organizational id of a partner organization, required if organization is of type directCustomer or partnerCustomer"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "industry",
+        "isPurchaseOrderRequired"
+      ]
+    },
+    "organization" : {
+      "description" : "An organization object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this organization in the system"
+        },
+        "isLegalEntity" : {
+          "type" : "boolean",
+          "description" : "Defines whether this organization is the legal entity for the customer or not. Set to true if this is legal contact information"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Defines what type of customer this is. Possible values list ",
+          "enum" : [
+            "partner",
+            "directCustomer",
+            "partnerCustomer"
+          ]
+        },
+        "tradingName" : {
+          "type" : "string",
+          "description" : "Legal name of the customer organization"
+        },
+        "registrationNumber" : {
+          "type" : "string",
+          "description" : "Registration number of the customer organization"
+        },
+        "creditRiskRating" : {
+          "type" : "string",
+          "description" : "A credit risk rating assigned to the organization. Possible values list ",
+          "enum" : [
+            "green",
+            "orange",
+            "red",
+            "black",
+            "white"
+          ]
+        },
+        "website" : {
+          "type" : "string",
+          "description" : "Customer organization website"
+        },
+        "address" : {
+          "$ref" : "#/definitions/contactAddress"
+        },
+        "characteristics" : {
+          "type" : "array",
+          "description" : "Descriptive characteristics of an organization",
+          "items" : {
+            "$ref" : "#/definitions/payloadOrganizationCharacteristics"
+          }
+        },
+        "relatedParties" : {
+          "type" : "array",
+          "description" : "A list of other resources related to the organizational entity",
+          "items" : {
+            "$ref" : "#/definitions/payloadContactRelatedParties"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "isLegalEntity",
+        "type",
+        "tradingName",
+        "registrationNumber",
+        "creditRiskRating",
+        "website",
+        "address",
+        "characteristics",
+        "relatedParties"
+      ]
+    },
+    "organization_array" : {
+      "description" : "An organization array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/organization"
+      }
+    },
+    "update_a_specific_organization" : {
+      "description" : "json payload",
+      "properties" : {
+        "isLegalEntity" : {
+          "type" : "boolean",
+          "description" : "Defines whether this organization is a legal entity for the customer or not. Set to true if this is legal contact information"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Defines what type of customer this entity represents. Accepted values list ",
+          "enum" : [
+            "partner",
+            "directCustomer",
+            "partnerCustomer"
+          ]
+        },
+        "tradingName" : {
+          "type" : "string",
+          "description" : "Legal name of the organization entity"
+        },
+        "registrationNumber" : {
+          "type" : "string",
+          "description" : "Registration number of the organization entity"
+        },
+        "website" : {
+          "type" : "string",
+          "description" : "Customer or organization website"
+        },
+        "address" : {
+          "$ref" : "#/definitions/contactAddress"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/updateOrganizationCharacteristics"
+        }
+      },
+      "type" : "object"
+    },
+    "updateOrganizationCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "industry" : {
+          "type" : "string",
+          "description" : "Industry the customer belongs to. Accepted values list ",
+          "enum" : [
+            "agriculture",
+            "conglomerate",
+            "education",
+            "financial",
+            "government",
+            "informationTechnology",
+            "manufacturing",
+            "mediaEntertainment",
+            "professional",
+            "services",
+            "telecom",
+            "trade",
+            "utility"
+          ]
+        },
+        "parentPartnerId" : {
+          "type" : "string",
+          "description" : "The organizational id of a partner organization, required if organization is of type directCustomer or partnerCustomer"
+        },
+        "isPurchaseOrderRequired" : {
+          "type" : "boolean",
+          "description" : "Whether a Purchase Order will be required in invoicing for product orders. Accepted values: true, false"
+        }
+      },
+      "type" : "object"
+    }
+  },
+  "paths" : {
+    "/customers/{customerId}/contacts" : {
+      "post" : {
+        "description" : "<p>Creates a new contact under a customer.</p><p>Use this to create billing, technical and general contacts for your account.</p><p>Contacts created here get used when placing and notifying for status on orders.</p>",
+        "summary" : "Create a new contact for a customer",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/create_a_new_contact_for_a_customer"
+            }
+          },
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "A contact object",
+            "schema" : {
+              "$ref" : "#/definitions/contact"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "contacts"
+        ]
+      },
+      "get" : {
+        "description" : "<p>Returns a list of all your contacts.</p><p>Use this to see all contacts defined under your customer account.</p><p>When placing orders, use an applicable contact from this list as the point of contact.</p>",
+        "summary" : "Get all your contacts",
+        "parameters" : [
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A contact array",
+            "schema" : {
+              "$ref" : "#/definitions/contact_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "contacts"
+        ]
+      }
+    },
+    "/customers/{customerId}/contacts/{contactId}" : {
+      "get" : {
+        "description" : "<p>Returns a specific contact, identified by its id.</p><p>Use this to get details about a specific contact under your customer account.</p>",
+        "summary" : "Get a specific contact",
+        "parameters" : [
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of a contact",
+            "name" : "contactId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A contact object",
+            "schema" : {
+              "$ref" : "#/definitions/contact"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "contacts"
+        ]
+      },
+      "delete" : {
+        "description" : "<p>Remove a specific contact, identified by its id.</p><p>Use this to remove a specific contact under your customer account.</p>",
+        "summary" : "Remove a specific contact",
+        "parameters" : [
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of a contact",
+            "name" : "contactId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "responses" : {
+          "204" : {
+            "description" : "No content."
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "contacts"
+        ]
+      },
+      "put" : {
+        "description" : "<p>Updates a specific contact, identified by its id.</p><p>Use this to change contact details.</p>",
+        "summary" : "Update a specific contact",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/definitions/update_a_specific_contact"
+            }
+          },
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of a contact",
+            "name" : "contactId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A contact object",
+            "schema" : {
+              "$ref" : "#/definitions/contact"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "contacts"
+        ]
+      }
+    },
+    "/customers" : {
+      "post" : {
+        "description" : "<p>Creates a new Customer account.</p><p>Being a valid customer is a requirement for many API functions, such as placing or querying orders, checking existing service status, etc.</p><p>Creating a new customer is not instant, only a Customer with status active can use the API that requires a customer id.</p>",
+        "summary" : "Create a new customer account",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/create_a_new_customer_account"
+            }
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "A customer object",
+            "schema" : {
+              "$ref" : "#/definitions/customer"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "customers"
+        ]
+      }
+    },
+    "/customers/{customerId}" : {
+      "get" : {
+        "description" : "<p>Returns a specific customer, identified by its id.</p><p>Use this to get a specific customer in the system.</p>",
+        "summary" : "Get a specific customer",
+        "parameters" : [
+          {
+            "description" : "The id of the customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A customer object",
+            "schema" : {
+              "$ref" : "#/definitions/customer"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "customers"
+        ]
+      },
+      "delete" : {
+        "description" : "<p>Removes a specific customer, identified by its id.</p><p>Use this to remove a customer.  Once removed, a customer account may not use any APIs that require a valid customer id.</p>",
+        "summary" : "Remove a specific customer",
+        "parameters" : [
+          {
+            "description" : "The id of the customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "responses" : {
+          "204" : {
+            "description" : "No content."
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "customers"
+        ]
+      },
+      "put" : {
+        "description" : "<p>Updates a specific customer, identified by its id.</p><p>Use this to change customer details.  When updating the list of regions or countries, ensure to pass in the complete updated list.</p>",
+        "summary" : "Update a specific customer",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/definitions/update_a_specific_customer"
+            }
+          },
+          {
+            "description" : "The id of the customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A customer object",
+            "schema" : {
+              "$ref" : "#/definitions/customer"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "customers"
+        ]
+      }
+    },
+    "/customers/{customerId}/organizations" : {
+      "post" : {
+        "description" : "<p>Creates a new organizational entity under a customer.</p><p>Use this to define the legal entity as part of your account against which orders will be placed.  There needs to be at least one organization for your customer.</p><p>Information given here is used to begin the process of activating your customer account.</p>",
+        "summary" : "Create a new organizational entity for a customer",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/create_a_new_organizational_entity_for_a_customer"
+            }
+          },
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "An organization object",
+            "schema" : {
+              "$ref" : "#/definitions/organization"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "organizations"
+        ]
+      },
+      "get" : {
+        "description" : "<p>Returns a list of all your organizations.</p><p>Use this to see all organizations defined under your customer account.</p><p>When placing orders, use one of these organizations against which the order is to be issued.</p>",
+        "summary" : "Get all your organizational entities",
+        "parameters" : [
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An organization array",
+            "schema" : {
+              "$ref" : "#/definitions/organization_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "organizations"
+        ]
+      }
+    },
+    "/customers/{customerId}/organizations/{organizationId}" : {
+      "get" : {
+        "description" : "<p>Returns a specific organizational entity, identified by its id.</p><p>Use this to get details about a specific organization under your customer account.</p>",
+        "summary" : "Get a specific organization",
+        "parameters" : [
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of an organization",
+            "name" : "organizationId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An organization object",
+            "schema" : {
+              "$ref" : "#/definitions/organization"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "organizations"
+        ]
+      },
+      "delete" : {
+        "description" : "<p>Remove a specific organizational entity, identified by its id.</p><p>Use this to remove a specific organization under your customer account.  Once removed, no new orders can be placed against this organization.</p>",
+        "summary" : "Remove a specific organization",
+        "parameters" : [
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of an organization",
+            "name" : "organizationId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "responses" : {
+          "204" : {
+            "description" : "No content."
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "organizations"
+        ]
+      },
+      "put" : {
+        "description" : "<p>Updates a specific organization, identified by its id.</p><p>Use this to change organization details.  If this organization is or is becoming a legal entity, it will take some time for the change to be applied</p>",
+        "summary" : "Update a specific organization",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/definitions/update_a_specific_organization"
+            }
+          },
+          {
+            "description" : "The customer id of the parent customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of an organization",
+            "name" : "organizationId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An organization object",
+            "schema" : {
+              "$ref" : "#/definitions/organization"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "organizations"
+        ]
+      }
+    }
+  },
+  "tags" : [
+    {
+      "description" : "Make & manage contacts belonging to a customer",
+      "name" : "contacts"
+    },
+    {
+      "description" : "Make & manage customer accounts",
+      "name" : "customers"
+    },
+    {
+      "description" : "Make & manage organizational entities of a customer",
+      "name" : "organizations"
+    }
+  ]
+}

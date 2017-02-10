@@ -1,0 +1,419 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Provisioning APIs",
+    "description" : "Swagger UI documentation for Product Inventory API",
+    "version" : "0.9.0"
+  },
+  "host" : "api.tatacommuncations.com",
+  "schemes" : [
+    "https"
+  ],
+  "basePath" : "/GSC/v1",
+  "produces" : [
+    "application/json"
+  ],
+  "definitions" : {
+    "Error" : {
+      "description" : "A generic error message in json format",
+      "properties" : {
+        "error" : {
+          "type" : "string",
+          "description" : "The error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Additional data that was passed in to describe the error."
+        },
+        "error_code" : {
+          "type" : "integer",
+          "description" : "The error code to identify an error message by code.",
+          "format" : "int64"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "error"
+      ]
+    },
+    "productInventorySummary" : {
+      "description" : "Product inventory summary",
+      "properties" : {
+        "productId" : {
+          "type" : "string",
+          "description" : "A product id, a unique code identifying the product"
+        },
+        "productName" : {
+          "type" : "string",
+          "description" : "The product name"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "A descriptive paragraph of the product"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Status of the in-service product. Possible values list ",
+          "enum" : [
+            "active",
+            "inactive"
+          ]
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The quantity of numbers in service for this product",
+          "format" : "int64"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "productId",
+        "productName",
+        "description",
+        "status",
+        "quantity"
+      ]
+    },
+    "inventory_array" : {
+      "description" : "An in-service summary products array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/productInventorySummary"
+      }
+    },
+    "payloadInventoryNumbers" : {
+      "description" : "nested model",
+      "properties" : {
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country the phone number is in"
+        },
+        "number" : {
+          "type" : "string",
+          "description" : "The actual phone number"
+        },
+        "connectionType" : {
+          "type" : "string",
+          "description" : "The connection type in use. Possible values list = [pstn, direct]"
+        },
+        "connectionId" : {
+          "type" : "string",
+          "description" : "The id of the direct connection, if connectionType is direct"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the associated organizational entity"
+        },
+        "orderId" : {
+          "type" : "string",
+          "description" : "The id of the associated order"
+        },
+        "orderDate" : {
+          "type" : "string",
+          "description" : "The date the associated order was placed"
+        },
+        "inServiceDate" : {
+          "type" : "string",
+          "description" : "The date this number went into service"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "countryCode",
+        "number",
+        "connectionType",
+        "connectionId",
+        "organizationId",
+        "orderId",
+        "orderDate",
+        "inServiceDate"
+      ]
+    },
+    "inventory" : {
+      "description" : "An in-service product object",
+      "properties" : {
+        "productId" : {
+          "type" : "string",
+          "description" : "A product id, a unique code identifying the product"
+        },
+        "productName" : {
+          "type" : "string",
+          "description" : "The product name"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "A descriptive paragraph of the product"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Status of the in-service product. Possible values list ",
+          "enum" : [
+            "active",
+            "inactive"
+          ]
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The total amount of in-service numbers",
+          "format" : "int64"
+        },
+        "resultCount" : {
+          "type" : "integer",
+          "description" : "The number of filtered results returned, will be equal to quantity when no filter is used",
+          "format" : "int64"
+        },
+        "pageToken" : {
+          "type" : "string",
+          "description" : "A token to the next page of results, should be used as the value of the pageToken query parameter to get the next page"
+        },
+        "numbers" : {
+          "type" : "array",
+          "description" : "A list of numbers",
+          "items" : {
+            "$ref" : "#/definitions/payloadInventoryNumbers"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "productId",
+        "productName",
+        "description",
+        "status",
+        "quantity",
+        "resultCount",
+        "numbers"
+      ]
+    }
+  },
+  "paths" : {
+    "/customers/{customerId}/products" : {
+      "get" : {
+        "description" : "<p>Returns a list of all your in-service products.</p><p>Use this to see products and numbers that are in service. Products whose orders have not yet completed will not be listed here.</p><p>Use the API command for a specific product to get and search the detailed inventory of your in-service numbers.</p>",
+        "summary" : "Get all your in-service products",
+        "parameters" : [
+          {
+            "description" : "The id of the customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An in-service summary products array",
+            "schema" : {
+              "$ref" : "#/definitions/inventory_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "product inventory"
+        ]
+      }
+    },
+    "/customers/{customerId}/products/{productId}" : {
+      "get" : {
+        "description" : "<p>Returns details about a specific in-service product, identified by that product id.</p><p>Use this to list and search across all your in-service numbers that belong to the identified product.</p>",
+        "summary" : "Get a specific in-service product",
+        "parameters" : [
+          {
+            "description" : "Optionally filter results by an ISO 3166-1 alpha-3 or alpha-2 country code",
+            "name" : "countryCode",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by the connection type in use. Acceptable values list = [pstn, direct]",
+            "name" : "connectionType",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by the id of the associated organizational entity",
+            "name" : "organizationId",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by the id of the associated order",
+            "name" : "orderId",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by providing a date after when associated orders were placed",
+            "name" : "orderDateFrom",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by providing a date by when associated orders were placed",
+            "name" : "orderDateTo",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by providing a date after when service began",
+            "name" : "inServiceDateFrom",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally filter results by providing a date by when service began",
+            "name" : "inServiceDateTo",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "Optionally provide the number of results per page. Default results per page are 100, maximum results per page are 250",
+            "name" : "pageSize",
+            "in" : "query",
+            "required" : false,
+            "type" : "integer"
+          },
+          {
+            "description" : "A page token to retrieve the next page of results. Use the system-provided pageToken value from a response payload here",
+            "name" : "pageToken",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the customer",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the product",
+            "name" : "productId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An in-service product object",
+            "schema" : {
+              "$ref" : "#/definitions/inventory"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "product inventory"
+        ]
+      }
+    }
+  },
+  "tags" : [
+    {
+      "description" : "Search active product inventory of a customer",
+      "name" : "product inventory"
+    }
+  ]
+}
