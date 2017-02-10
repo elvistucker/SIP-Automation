@@ -9,7 +9,7 @@
   "schemes" : [
     "https"
   ],
-  "basePath" : "/sb/GSC/v1",
+  "basePath" : "/GSC/v1",
   "produces" : [
     "application/json"
   ],
