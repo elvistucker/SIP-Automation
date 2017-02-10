@@ -1,0 +1,1165 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Global SIP Connect - Product Orders",
+    "description" : "Swagger UI documentation to make and manage product orders",
+    "version" : "0.9.0",
+    "termsOfService" : "Please refer to Tata Communications usage policy at developers.tatacommunications.com/tos",
+    "contact" : {
+      "email" : "apisupport@api.tatacommunications.com"
+    }
+  },
+  "host" : "ta-sandbox.zilkr.io",
+  "schemes" : [
+    "https"
+  ],
+  "basePath" : "/v1",
+  "produces" : [
+    "application/json"
+  ],
+  "definitions" : {
+    "Error" : {
+      "description" : "A generic error message in json format",
+      "properties" : {
+        "error" : {
+          "type" : "string",
+          "description" : "The error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Additional data that was passed in to describe the error."
+        },
+        "error_code" : {
+          "type" : "integer",
+          "description" : "The error code to identify an error message by code.",
+          "format" : "int64"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "error"
+      ]
+    },
+    "order_product_with_any_available_phone_numbers" : {
+      "description" : "json payload",
+      "properties" : {
+        "requestId" : {
+          "type" : "string",
+          "description" : "Any value meaningful to you that correlates this order and other orders together"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that will be used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account you want associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country you want phone numbers of this product in"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The amount of phone numbers of this product you are ordering",
+          "format" : "int64"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that is placing this order"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/orderCharacteristics"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you want the product go into service"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "requestId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "quantity",
+        "organizationId",
+        "characteristics"
+      ]
+    },
+    "orderCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "connectionType" : {
+          "type" : "string",
+          "description" : "Will this order use the pstn or a direct connection for traffic - pstn, direct",
+          "enum" : [
+            "pstn",
+            "direct"
+          ]
+        },
+        "connectionId" : {
+          "type" : "string",
+          "description" : "The id of an existing direct connection, if connectionType is direct"
+        },
+        "outpulseType" : {
+          "type" : "string",
+          "description" : "What kind of outpulse do you want the network to use - sameAsNumber, prefixAndNumber, custom",
+          "enum" : [
+            "sameAsNumber",
+            "prefixAndNumber",
+            "custom"
+          ]
+        },
+        "outpulseDigits" : {
+          "type" : "string",
+          "description" : "The outpulse digits to use, if outpulseType is prefixAndNumber or custom"
+        },
+        "clidType" : {
+          "type" : "string",
+          "description" : "The type of calling line id for the order - realTime, block, custom",
+          "enum" : [
+            "realTime",
+            "block",
+            "custom"
+          ]
+        },
+        "clidDigits" : {
+          "type" : "string",
+          "description" : "Calling line id digits, if clidType is custom"
+        },
+        "isMobileBlocked" : {
+          "type" : "boolean",
+          "description" : "Should mobile number calling be blocked for this order"
+        },
+        "mobileOutpulseType" : {
+          "type" : "string",
+          "description" : "What kind of mobile calling outpulse do you want the network to use - sameAsNumber, prefixAndNumber, custom",
+          "enum" : [
+            "sameAsNumber",
+            "prefixAndNumber",
+            "custom"
+          ]
+        },
+        "mobileOutpulseDigits" : {
+          "type" : "string",
+          "description" : "The mobile outpulse digits to use, if mobileOutpulseType is prefixAndNumber or custom"
+        },
+        "isPayphoneBlocked" : {
+          "type" : "boolean",
+          "description" : "Should payphone calling be blocked for this order"
+        },
+        "payphoneOutpulseType" : {
+          "type" : "string",
+          "description" : "What kind of payphone calling outpulse do you want the network to use - sameAsNumber, prefixAndNumber, custom",
+          "enum" : [
+            "sameAsNumber",
+            "prefixAndNumber",
+            "custom"
+          ]
+        },
+        "payphoneOutpulseDigits" : {
+          "type" : "string",
+          "description" : "The payphone outpulse digits to use, if payphoneOutpulseType is prefixAndNumber or custom"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "connectionType",
+        "outpulseType",
+        "clidType",
+        "isMobileBlocked",
+        "mobileOutpulseType",
+        "isPayphoneBlocked",
+        "payphoneOutpulseType"
+      ]
+    },
+    "payloadOrderAnyNumberCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "connectionType" : {
+          "type" : "string",
+          "description" : "Did this order use the pstn or a direct connection for traffic - pstn, direct",
+          "enum" : [
+            "pstn",
+            "direct"
+          ]
+        },
+        "connectionId" : {
+          "type" : "string",
+          "description" : "The id of an existing direct connection, if connectionType was direct"
+        },
+        "outpulseType" : {
+          "type" : "string",
+          "description" : "What kind of outpulse did you want the network to use - sameAsNumber, prefixAndNumber, custom",
+          "enum" : [
+            "sameAsNumber",
+            "prefixAndNumber",
+            "custom"
+          ]
+        },
+        "outpulseDigits" : {
+          "type" : "string",
+          "description" : "The outpulse digits to use, if outpulseType is prefixAndNumber or custom"
+        },
+        "clidType" : {
+          "type" : "string",
+          "description" : "The type of calling line id for the order - realTime, block, custom",
+          "enum" : [
+            "realTime",
+            "block",
+            "custom"
+          ]
+        },
+        "clidDigits" : {
+          "type" : "string",
+          "description" : "Calling line id digits, if clidType is custom"
+        },
+        "isMobileBlocked" : {
+          "type" : "boolean",
+          "description" : "Should mobile number calling be blocked for this order"
+        },
+        "mobileOutpulseType" : {
+          "type" : "string",
+          "description" : "What kind of mobile calling outpulse did you want the network to use - sameAsNumber, prefixAndNumber, custom",
+          "enum" : [
+            "sameAsNumber",
+            "prefixAndNumber",
+            "custom"
+          ]
+        },
+        "mobileOutpulseDigits" : {
+          "type" : "string",
+          "description" : "The mobile outpulse digits to use, if mobileOutpulseType is prefixAndNumber or custom"
+        },
+        "isPayphoneBlocked" : {
+          "type" : "boolean",
+          "description" : "Should payphone calling be blocked for this order"
+        },
+        "payphoneOutpulseType" : {
+          "type" : "string",
+          "description" : "What kind of payphone calling outpulse dido you want the network to use - sameAsNumber, prefixAndNumber, custom",
+          "enum" : [
+            "sameAsNumber",
+            "prefixAndNumber",
+            "custom"
+          ]
+        },
+        "payphoneOutpulseDigits" : {
+          "type" : "string",
+          "description" : "The payphone outpulse digits to use, if payphoneOutpulseType is prefixAndNumber or custom"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "connectionType",
+        "outpulseType",
+        "clidType",
+        "isMobileBlocked",
+        "mobileOutpulseType",
+        "isPayphoneBlocked",
+        "payphoneOutpulseType"
+      ]
+    },
+    "order_any_number" : {
+      "description" : "Order product with any available phone numbers",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this order in the system"
+        },
+        "requestId" : {
+          "type" : "string",
+          "description" : "A value given by you that correlates this order and other orders together"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you wanted the order to complete"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that placed this order"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that was used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country the order phone numbers are in"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The amount of phone numbers of this product you ordered",
+          "format" : "int64"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "The status of this order"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadOrderAnyNumberCharacteristics"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "requestId",
+        "organizationId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "quantity",
+        "status",
+        "characteristics"
+      ]
+    },
+    "order_product_with_phone_numbers_to_port" : {
+      "description" : "json payload",
+      "properties" : {
+        "requestId" : {
+          "type" : "string",
+          "description" : "Any value meaningful to you that correlates this order and other orders together"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that will be used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account you want associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country you want phone numbers of this product in"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that is placing this order"
+        },
+        "portingNumbers" : {
+          "type" : "array",
+          "description" : "The list of your phone numbers you wish to port with this order",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/orderCharacteristics"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you want the port to complete"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "requestId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "organizationId",
+        "portingNumbers",
+        "characteristics"
+      ]
+    },
+    "order_port_number" : {
+      "description" : "Order product with phone numbers to port",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this order in the system"
+        },
+        "requestId" : {
+          "type" : "string",
+          "description" : "A value given by you that correlates this order and other orders together"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you wanted the order to complete"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that placed this order"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that was used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country the order phone numbers are in"
+        },
+        "portingNumbers" : {
+          "type" : "array",
+          "description" : "Array of ported numbers",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "The status of this order. Accepted values: received, pending, complete, canceled",
+          "enum" : [
+            "received",
+            "pending",
+            "complete",
+            "canceled"
+          ]
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadOrderAnyNumberCharacteristics"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "requestId",
+        "organizationId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "portingNumbers",
+        "status",
+        "characteristics"
+      ]
+    },
+    "order_product_with_phone_number_ranges" : {
+      "description" : "json payload",
+      "properties" : {
+        "requestId" : {
+          "type" : "string",
+          "description" : "Any value meaningful to you that correlates this order and other orders together"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that will be used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account you want associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country you want phone numbers of this product in"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The id of the reservation you hold for the phone numbers you now are ordering",
+          "format" : "int64"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that is placing this order"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/orderCharacteristics"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you want the order to complete"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "requestId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "quantity",
+        "organizationId",
+        "characteristics"
+      ]
+    },
+    "order_range_number" : {
+      "description" : "Order product with phone number ranges",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this order in the system"
+        },
+        "requestId" : {
+          "type" : "string",
+          "description" : "A value given by you that correlates this order and other orders together"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that was used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country the order phone numbers are in"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The amount of phone numbers of this product you ordered",
+          "format" : "int64"
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that placed this order"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "The status of this order"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadOrderAnyNumberCharacteristics"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you wanted the order to complete"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "requestId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "quantity",
+        "organizationId",
+        "status",
+        "characteristics"
+      ]
+    },
+    "order_array" : {
+      "description" : "An order payload array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/order"
+      }
+    },
+    "order" : {
+      "description" : "An order object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The unique id of this order in the system"
+        },
+        "requestId" : {
+          "type" : "string",
+          "description" : "A value given by you that correlates this order and other orders together"
+        },
+        "requestedStartDate" : {
+          "type" : "string",
+          "description" : "Is there a date (UTC format) by which you wanted the order to complete? Provide that date here."
+        },
+        "organizationId" : {
+          "type" : "string",
+          "description" : "The id of the legal organizational entity under your account that placed this order"
+        },
+        "paymentId" : {
+          "type" : "string",
+          "description" : "The id of your payments object under your account that was used to pay for this order"
+        },
+        "contactId" : {
+          "type" : "string",
+          "description" : "The id of the notification and technical contact under your account associated with this order"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "The ISO 3166-1 alpha-3 country code of the country the order phone numbers are in"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "description" : "The amount of phone numbers of this product you ordered",
+          "format" : "int64"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "The status of this order. Accepted values: received, pending, complete, canceled",
+          "enum" : [
+            "received",
+            "pending",
+            "complete",
+            "canceled"
+          ]
+        },
+        "portingNumbers" : {
+          "type" : "array",
+          "description" : "Array of ported numbers",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadOrderAnyNumberCharacteristics"
+        },
+        "notes" : {
+          "type" : "string",
+          "description" : "Any descriptive notes or comments with the order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "requestId",
+        "organizationId",
+        "paymentId",
+        "contactId",
+        "countryCode",
+        "status",
+        "characteristics"
+      ]
+    }
+  },
+  "paths" : {
+    "/customers/{customerId}/orders/{productId}/numbers/any" : {
+      "post" : {
+        "description" : "<p>Allows you to order a quantity of phone numbers of the specified product and let the system choose the numbers.</p><p>Use this to order one/more phone numbers of the specified product, where the system will pick the first available matches.</p><p>Make a new request if you wish to vary the elements of the order, and use the requestId field to correlate multiple orders together.</p>",
+        "summary" : "Order product with any available phone numbers",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/order_product_with_any_available_phone_numbers"
+            }
+          },
+          {
+            "description" : "The id of the customer object of your account",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the product this order is for",
+            "name" : "productId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "Order product with any available phone numbers",
+            "schema" : {
+              "$ref" : "#/definitions/order_any_number"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "orders"
+        ]
+      }
+    },
+    "/customers/{customerId}/orders/{productId}/numbers/port" : {
+      "post" : {
+        "description" : "<p>Allows you to port a quantity of your phone numbers into the specified product.</p><p>Use this to port one/more of your phone numbers into the specified product.</p><p>Make a new request if you wish to vary the elements of the order, and use the requestId field to correlate multiple orders together.</p>",
+        "summary" : "Order product with phone numbers to port",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/order_product_with_phone_numbers_to_port"
+            }
+          },
+          {
+            "description" : "The id of the customer object of your account",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the product this order is for",
+            "name" : "productId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "Order product with phone numbers to port",
+            "schema" : {
+              "$ref" : "#/definitions/order_port_number"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "orders"
+        ]
+      }
+    },
+    "/customers/{customerId}/orders/{productId}/numbers/range" : {
+      "post" : {
+        "description" : "<p>Allows you to order a quantity of phone numbers of the specified product and in a specified range.</p><p>Use this to order one/more phone numbers of the specified product, where the system will pick matching numbers from a numbers range you give.</p><p>Make a new request if you wish to vary the elements of the order, and use the requestId field to correlate multiple orders together.</p>",
+        "summary" : "Order product with phone number ranges",
+        "parameters" : [
+          {
+            "description" : "json payload",
+            "name" : "body",
+            "in" : "body",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/order_product_with_phone_number_ranges"
+            }
+          },
+          {
+            "description" : "The id of the customer object of your account",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the product this order is for",
+            "name" : "productId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "201" : {
+            "description" : "Order product with phone number ranges",
+            "schema" : {
+              "$ref" : "#/definitions/order_range_number"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "orders"
+        ]
+      }
+    },
+    "/customers/{customerId}/orders" : {
+      "get" : {
+        "description" : "<p>Returns a list of all your orders.</p><p>Use this to see all orders you have ever placed with the system.  Orders in all states will be shown, including canceled orders.</p><p>This command allows you to filter the list of orders by an organizationId or requestId.</p>",
+        "summary" : "Get all your orders",
+        "parameters" : [
+          {
+            "description" : "The id of the legal organizational entity under your account that is placed an order",
+            "name" : "organizationId",
+            "in" : "query",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "Any value meaningful to you that correlated orders together",
+            "name" : "requestId",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the customer object of your account",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An order payload array",
+            "schema" : {
+              "$ref" : "#/definitions/order_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "orders"
+        ]
+      }
+    },
+    "/customers/{customerId}/orders/{orderId}" : {
+      "get" : {
+        "description" : "<p>Returns a specific order, identified by its id.</p><p>Use this to see a specific order you have placed with the system.</p>",
+        "summary" : "Get a specific order",
+        "parameters" : [
+          {
+            "description" : "The id of the customer object of your account",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the order",
+            "name" : "orderId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "An order object",
+            "schema" : {
+              "$ref" : "#/definitions/order"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "orders"
+        ]
+      },
+      "delete" : {
+        "description" : "<p>Cancels a specific order, identified by its id.</p><p>Use this to cancel a specific order you have placed with the system.  Only orders in a received or pending state may be canceled.</p>",
+        "summary" : "Cancel a specific order",
+        "parameters" : [
+          {
+            "description" : "The id of the customer object of your account",
+            "name" : "customerId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the order",
+            "name" : "orderId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          },
+          {
+            "description" : "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name" : "Authorization",
+            "in" : "header",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "consumes" : [
+          "application/json"
+        ],
+        "responses" : {
+          "204" : {
+            "description" : "No content."
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "orders"
+        ]
+      }
+    }
+  },
+  "tags" : [
+    {
+      "description" : "Make and manage product orders",
+      "name" : "orders"
+    }
+  ]
+}

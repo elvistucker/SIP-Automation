@@ -1,0 +1,670 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Global SIP Connect - Availability APIs",
+    "description" : "Swagger UI documentation to search product availability",
+    "version" : "0.9.0",
+    "termsOfService" : "Please refer to Tata Communications usage policy at developers.tatacommunications.com/tos",
+    "contact" : {
+      "email" : "apisupport@api.tatacommunications.com"
+    }
+  },
+  "host" : "ta-sandbox.zilkr.io",
+  "schemes" : [
+    "https"
+  ],
+  "basePath" : "/v1",
+  "produces" : [
+    "application/json"
+  ],
+  "definitions" : {
+    "Error" : {
+      "description" : "A generic error message in json format",
+      "properties" : {
+        "error" : {
+          "type" : "string",
+          "description" : "The error message."
+        },
+        "details" : {
+          "type" : "string",
+          "description" : "Additional data that was passed in to describe the error."
+        },
+        "error_code" : {
+          "type" : "integer",
+          "description" : "The error code to identify an error message by code.",
+          "format" : "int64"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "error"
+      ]
+    },
+    "generic_country_array" : {
+      "description" : "A country array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/country"
+      }
+    },
+    "payloadCountryCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "isFixedNumbersOffered" : {
+          "type" : "boolean",
+          "description" : "Are fixed line phone numbers offered in this country"
+        },
+        "isMobileNumbersOffered" : {
+          "type" : "boolean",
+          "description" : "Are mobile numbers offered in this country"
+        },
+        "isPayphoneNumbersOffered" : {
+          "type" : "boolean",
+          "description" : "Are payphone numbers offered in this country"
+        },
+        "standardLeadTime" : {
+          "type" : "string",
+          "description" : "The time it minimally takes to order a new phone number in this country"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "isFixedNumbersOffered",
+        "isMobileNumbersOffered",
+        "isPayphoneNumbersOffered",
+        "standardLeadTime"
+      ]
+    },
+    "payloadCountryProducts" : {
+      "description" : "nested model",
+      "properties" : {
+        "productName" : {
+          "type" : "string",
+          "description" : "The product name"
+        },
+        "href" : {
+          "type" : "string",
+          "description" : "A complete URL to the related product"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "productName",
+        "href"
+      ]
+    },
+    "country" : {
+      "description" : "A country object",
+      "properties" : {
+        "countryCode" : {
+          "type" : "string",
+          "description" : "An ISO 3166-1 alpha3 code identifying a country"
+        },
+        "countryName" : {
+          "type" : "string",
+          "description" : "The country name"
+        },
+        "countryCallingCode" : {
+          "type" : "string",
+          "description" : "The E.164 telephony calling code of the country"
+        },
+        "isoAlpha2Code" : {
+          "type" : "string",
+          "description" : "The country ISO 3166-1 alpha-2 country code"
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadCountryCharacteristics"
+        },
+        "products" : {
+          "type" : "array",
+          "description" : "The list of available products in the country",
+          "items" : {
+            "$ref" : "#/definitions/payloadCountryProducts"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "countryCode",
+        "countryName",
+        "countryCallingCode",
+        "isoAlpha2Code",
+        "characteristics",
+        "products"
+      ]
+    },
+    "payloadCityProducts" : {
+      "description" : "nested model",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : ""
+        },
+        "href" : {
+          "type" : "string",
+          "description" : ""
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "name",
+        "href"
+      ]
+    },
+    "city" : {
+      "description" : "City model",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identifier for the city"
+        },
+        "cityName" : {
+          "type" : "string",
+          "description" : "The city name"
+        },
+        "stateOrProvince" : {
+          "type" : "string",
+          "description" : "The state or province name this city is in, if applicable"
+        },
+        "products" : {
+          "type" : "array",
+          "description" : "",
+          "items" : {
+            "$ref" : "#/definitions/payloadCityProducts"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "id",
+        "cityName",
+        "products"
+      ]
+    },
+    "generic_city_array" : {
+      "description" : "A city array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/city"
+      }
+    },
+    "generic_product_array" : {
+      "description" : "A product array",
+      "properties" : {},
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/product"
+      }
+    },
+    "payloadProductCharacteristics" : {
+      "description" : "nested model",
+      "properties" : {
+        "isCityRequiredOnOrder" : {
+          "type" : "boolean",
+          "description" : "States whether or not a city is required when placing an order"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "isCityRequiredOnOrder"
+      ]
+    },
+    "payloadProductCountries" : {
+      "description" : "nested model",
+      "properties" : {
+        "countryCode" : {
+          "type" : "string",
+          "description" : "An ISO 3166-1 alpha3 code identifying a country"
+        },
+        "href" : {
+          "type" : "string",
+          "description" : "A complete URL to the related product"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "countryCode",
+        "href"
+      ]
+    },
+    "payloadProductDocuments" : {
+      "description" : "nested model",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "A name associated with the document"
+        },
+        "href" : {
+          "type" : "string",
+          "description" : "A complete URL to the related product"
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "name",
+        "href"
+      ]
+    },
+    "product" : {
+      "description" : "A product object",
+      "properties" : {
+        "productId" : {
+          "type" : "string",
+          "description" : "A product id, a unique code identifying the product in the catalog"
+        },
+        "productName" : {
+          "type" : "string",
+          "description" : "The product name"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "A descriptive paragraph of the product."
+        },
+        "isCityRequiredOnOrder" : {
+          "type" : "boolean",
+          "description" : "Is a city required for this order"
+        },
+        "isBundle" : {
+          "type" : "boolean",
+          "description" : "Is this an individual product or a bundled set of products"
+        },
+        "priceType" : {
+          "type" : "string",
+          "description" : "How this product is priced. Accepted values: recurring, one-time, usage",
+          "enum" : [
+            "recurring",
+            "one-time",
+            "usage"
+          ]
+        },
+        "characteristics" : {
+          "$ref" : "#/definitions/payloadProductCharacteristics"
+        },
+        "countries" : {
+          "type" : "array",
+          "description" : "The list of countries this product is offered in",
+          "items" : {
+            "$ref" : "#/definitions/payloadProductCountries"
+          }
+        },
+        "documents" : {
+          "type" : "array",
+          "description" : "A list of documents, if any, necessary to order this product",
+          "items" : {
+            "$ref" : "#/definitions/payloadProductDocuments"
+          }
+        }
+      },
+      "type" : "object",
+      "required" : [
+        "productId",
+        "productName",
+        "description",
+        "isCityRequiredOnOrder",
+        "isBundle",
+        "priceType",
+        "characteristics",
+        "countries",
+        "documents"
+      ]
+    }
+  },
+  "paths" : {
+    "/countries" : {
+      "get" : {
+        "description" : "<p>Returns a list of all countries where one/more products are offered.</p><p>Use this to understand the set of products offered in a geography.  The id of any country is its 3 letter ISO 3166-1 alpha-3 code.</p>",
+        "summary" : "Get a list of countries where products are offered",
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A country array",
+            "schema" : {
+              "$ref" : "#/definitions/generic_country_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "countries"
+        ]
+      }
+    },
+    "/countries/{countryCode}" : {
+      "get" : {
+        "description" : "<p>Returns a single country, identified by its id, where one/more products are offered.</p><p>Use this to understand the set of products offered in a specific country.  The id of a country is its 3 letter ISO 3166-1 alpha-3 code.</p>",
+        "summary" : "Gets one specific country where products are offered",
+        "parameters" : [
+          {
+            "description" : "ISO 3166-1 alpha-3 country code",
+            "name" : "countryCode",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A country object",
+            "schema" : {
+              "$ref" : "#/definitions/country"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "countries"
+        ]
+      }
+    },
+    "/countries/{countryCode}/cities" : {
+      "get" : {
+        "description" : "<p>Returns a list of cities in a country where one/more products are offered.</p><p>Use this to understand the regions within a country where products are offered.  The id of any country is its 3 letter ISO 3166-1 alpha-3 code.</p><p>This command allows you to filter the list of cities with a partial or exact match on a city name.</p>",
+        "summary" : "Get a list of cities for a country where one/more products are offered",
+        "parameters" : [
+          {
+            "description" : "A partial or exact name of a city to filter the list of cities by",
+            "name" : "cityName",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "ISO 3166-1 alpha-3 country code",
+            "name" : "countryCode",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A city array",
+            "schema" : {
+              "$ref" : "#/definitions/generic_city_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "countries"
+        ]
+      }
+    },
+    "/products" : {
+      "get" : {
+        "description" : "<p>Returns a list of all products offered via automation APIs.</p><p>Use this to see the products available to order and manage via automation APIs.  The data returned is a summary view of each product.</p><p>This command allows you to filter the list of products by a country and/or city.</p>",
+        "summary" : "Get the products catalog",
+        "parameters" : [
+          {
+            "description" : "An ISO 3166-1 alpha-3 country code to filter the list of products by",
+            "name" : "countryCode",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of a city to filter the list of products by",
+            "name" : "cityId",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A product array",
+            "schema" : {
+              "$ref" : "#/definitions/generic_product_array"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "products"
+        ]
+      }
+    },
+    "/products/{productId}" : {
+      "get" : {
+        "description" : "<p>Returns more information on a specific product, identified by its id.</p><p>Use this to see the set of countries a product may be available in.  The data returned is a detail view of each product.</p><p>By using the filter for a country or city, you can quickly identify whether this product is available in a specific geography.</p>",
+        "summary" : "Get details on a specific product in the catalog",
+        "parameters" : [
+          {
+            "description" : "An ISO 3166-1 alpha-3 country code to check availability of this product",
+            "name" : "countryCode",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of a city to to check availability of this product",
+            "name" : "cityId",
+            "in" : "query",
+            "required" : false,
+            "type" : "string"
+          },
+          {
+            "description" : "The id of the product",
+            "name" : "productId",
+            "in" : "path",
+            "required" : true,
+            "type" : "string"
+          }
+        ],
+        "produces" : [
+          "application/json"
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "A product object",
+            "schema" : {
+              "$ref" : "#/definitions/product"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "405" : {
+            "description" : "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "tags" : [
+          "products"
+        ]
+      }
+    }
+  },
+  "tags" : [
+    {
+      "description" : "Search countries and cities for products",
+      "name" : "countries"
+    },
+    {
+      "description" : "Search the product catalog",
+      "name" : "products"
+    }
+  ]
+}
