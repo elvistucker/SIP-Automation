@@ -1,0 +1,611 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Provisioning APIs",
+    "description": "Swagger UI documentation to manage accounts, products, inventory and orders",
+    "version": "0.9.0"
+  },
+  "host": "api.tatacommunications.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "\/v1",
+  "produces": [
+    "application\/json"
+  ],
+  "definitions": {
+    "Error": {
+      "description": "A generic error message in json format",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "The error message."
+        },
+        "details": {
+          "type": "string",
+          "description": "Additional data that was passed in to describe the error."
+        },
+        "error_code": {
+          "type": "integer",
+          "description": "The error code to identify an error message by code.",
+          "format": "int64"
+        }
+      },
+      "type": "object",
+      "required": [
+        "error"
+      ]
+    },
+    "payloadInventoryNumbers": {
+      "description": "nested model",
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "The ISO 3166-1 alpha-3 country code of the country the phone number is in"
+        },
+        "number": {
+          "type": "string",
+          "description": "The actual phone number"
+        },
+        "productId": {
+          "type": "string",
+          "description": "A product id, a unique code identifying the product"
+        },
+        "cityName": {
+          "type": "string",
+          "description": "The city name"
+        },
+        "stateOrProvince": {
+          "type": "string",
+          "description": "The state or province name the city is in, if applicable"
+        }
+      },
+      "type": "object",
+      "required": [
+        "countryCode",
+        "number",
+        "productId",
+        "cityName",
+        "stateOrProvince"
+      ]
+    },
+    "inventory": {
+      "description": "An available numbers object",
+      "properties": {
+        "resultCount": {
+          "type": "integer",
+          "description": "The number of filtered results returned, will be equal to quantity when no filter is used",
+          "format": "int64"
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "A token to the next page of results, should be used as the value of the pageToken query parameter to get the next page"
+        },
+        "numbers": {
+          "type": "array",
+          "description": "An available numbers array",
+          "items": {
+            "$ref": "#\/definitions\/payloadInventoryNumbers"
+          }
+        }
+      },
+      "type": "object",
+      "required": [
+        "resultCount",
+        "numbers"
+      ]
+    },
+    "create_a_new_number_reservation_for_a_customer": {
+      "description": "json payload",
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "The ISO 3166-1 alpha-3 or alpha-2 country code of the country this reservation is for"
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "The id of the legal organizational entity under your account that is reserving these numbers"
+        },
+        "numbers": {
+          "type": "array",
+          "description": "The list of numbers, in E.164 format being reserved",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "object",
+      "required": [
+        "countryCode",
+        "organizationId",
+        "numbers"
+      ]
+    },
+    "reservation": {
+      "description": "A reservation object",
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "The ISO 3166-1 alpha-3 country code of the country the phone number is in"
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "The id of the legal organizational entity under your account that placed this order"
+        },
+        "numbers": {
+          "type": "array",
+          "description": "A list of numbers",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "object",
+      "required": [
+        "countryCode",
+        "organizationId",
+        "numbers"
+      ]
+    },
+    "reservation_array": {
+      "description": "A reservation array",
+      "properties": {
+        
+      },
+      "type": "array",
+      "items": {
+        "$ref": "#\/definitions\/reservation"
+      }
+    }
+  },
+  "paths": {
+    "\/numbers": {
+      "get": {
+        "description": "<p>Returns numbers that are available to order based on various criteria.<\/p><p>Use this to search for phone numbers across all available numbers, based on various search filters. Searching is currently enforced to one country at a time.<\/p><p>The contains parameter will let you define number matching patterns to look for. E.g. contains=202* searches for all numbers starting with 202. contains=???123* searches for any numbers with 123 as the 4th, 5th and 6th digit. contains=800RUGDOCS searches for a vanity 800 number with RUGDOCS (7843627)<\/p>",
+        "summary": "Search for available numbers across products and countries",
+        "parameters": [
+          {
+            "description": "The ISO 3166-1 alpha-3 or alpha-2 country code of the country you are checking inventory for",
+            "name": "countryCode",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Optionally search by a state or province name, if applicable",
+            "name": "stateOrProvince",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Optionally search by a city name, if applicable",
+            "name": "cityName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Optionally search by a product id",
+            "name": "productId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Optionally provide a pattern for matching numbers, use ? for one character, use * for 0 or more characters",
+            "name": "contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Optionally provide the number of available numbers you are looking for",
+            "name": "quantity",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "Optionally provide the starting range of a set of numbers you are looking for",
+            "name": "rangeFrom",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Optionally provide the ending range of a set of numbers you are looking for",
+            "name": "rangeTo",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Whether a set of numbers you are looking for need to be in order or not",
+            "name": "consecutive",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "description": "Optionally provide the number of results per page. Default results per page are 100, maximum results per page are 250",
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "A page token to retrieve the next page of results. Use the system-provided pageToken value from a response payload here",
+            "name": "pageToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application\/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "An available numbers object",
+            "schema": {
+              "$ref": "#\/definitions\/inventory"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "401": {
+            "description": "The request requires user authentication.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "403": {
+            "description": "The server understood the request, but is refusing to fulfill it.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "404": {
+            "description": "The server has not found anything matching the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "405": {
+            "description": "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          }
+        },
+        "tags": [
+          "number inventory"
+        ]
+      }
+    },
+    "\/customers\/{customerId}\/reservations": {
+      "post": {
+        "description": "<p>Creates a new reservation under a customer.<\/p><p>Use this to create a new reservation for a set of numbers. The resulting reservation id may be used when ordering all numbers in this reservation.<\/p><p>You may not have more than 50 numbers in a single reservation, and may not have more than 5 active reservations. Reservations last 10 minutes before expiring.<\/p>",
+        "summary": "Create a new number reservation for a customer",
+        "parameters": [
+          {
+            "description": "json payload",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/create_a_new_number_reservation_for_a_customer"
+            }
+          },
+          {
+            "description": "The id of the customer",
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "consumes": [
+          "application\/json"
+        ],
+        "produces": [
+          "application\/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "A reservation object",
+            "schema": {
+              "$ref": "#\/definitions\/reservation"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "401": {
+            "description": "The request requires user authentication.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "403": {
+            "description": "The server understood the request, but is refusing to fulfill it.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "404": {
+            "description": "The server has not found anything matching the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "405": {
+            "description": "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          }
+        },
+        "tags": [
+          "number inventory"
+        ]
+      },
+      "get": {
+        "description": "<p>Returns a list of all your active number reservations.<\/p><p>Use this to see all active number inventory reservations you hold.<\/p><p>Use the API command to place an order using a reservation id, if you wish to order all numbers under a specific reservation.<\/p>",
+        "summary": "Get all your number reservations",
+        "parameters": [
+          {
+            "description": "The id of the customer",
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application\/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A reservation array",
+            "schema": {
+              "$ref": "#\/definitions\/reservation_array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "401": {
+            "description": "The request requires user authentication.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "403": {
+            "description": "The server understood the request, but is refusing to fulfill it.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "404": {
+            "description": "The server has not found anything matching the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "405": {
+            "description": "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          }
+        },
+        "tags": [
+          "number inventory"
+        ]
+      }
+    },
+    "\/customers\/{customerId}\/reservations\/{reservationId}": {
+      "get": {
+        "description": "<p>Returns details about a specific number reservation, identified by a reservation id.<\/p><p>Use this to list all numbers reserved under the given reservation id.<\/p>",
+        "summary": "Get a specific number reservation",
+        "parameters": [
+          {
+            "description": "The id of the customer",
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The id of the reservation",
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application\/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A reservation object",
+            "schema": {
+              "$ref": "#\/definitions\/reservation"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "401": {
+            "description": "The request requires user authentication.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "403": {
+            "description": "The server understood the request, but is refusing to fulfill it.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "404": {
+            "description": "The server has not found anything matching the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "405": {
+            "description": "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          }
+        },
+        "tags": [
+          "number inventory"
+        ]
+      },
+      "delete": {
+        "description": "<p>Remove a specific nmber reservation, identified by a reservation id.<\/p><p>Use this to remove a number reservation under your customer account.<\/p>",
+        "summary": "Remove a specific number reservation",
+        "parameters": [
+          {
+            "description": "The id of the customer",
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "The id of the reservation",
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "JWT Token (ex. 'Bearer &lttoken&gt')",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "consumes": [
+          "application\/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "No content."
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "401": {
+            "description": "The request requires user authentication.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "403": {
+            "description": "The server understood the request, but is refusing to fulfill it.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "404": {
+            "description": "The server has not found anything matching the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "405": {
+            "description": "The method specified in the Request-Line is not allowed for the resource identified by the Request-URI.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "schema": {
+              "$ref": "#\/definitions\/Error"
+            }
+          }
+        },
+        "tags": [
+          "number inventory"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "description": "Search for available numbers",
+      "name": "number inventory"
+    }
+  ]
+}
